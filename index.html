@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bicol University | Student Management System</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="main-header">
+      <div class="brand-logo">
+        <img src="image/bup-logo.png" alt="BU Logo" />
+        <span>Bicol University Polangui</span>
+      </div>
+      <div class="nav-links">
+        <a href="login.html" class="btn btn-secondary">Login</a>
+        <a
+          href="signup.html"
+          class="btn btn-primary"
+          style="background-color: transparent; border: 1px solid white"
+          >Sign Up</a
+        >
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section
+      class="hero-section"
+      style="background-image: url('image/Login_photo.jpg')"
+    >
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">Student Management System</h1>
+        <p class="hero-subtitle">
+          Excellence in Education, Character, and Service
+        </p>
+        <a
+          href="login.html"
+          class="btn btn-secondary"
+          style="padding: 15px 30px; font-size: 1.2rem"
+          >Access Portal</a
+        >
+      </div>
+    </section>
+
+    <!-- Mission/Vision Carousel -->
+    <div class="container">
+      <div class="carousel-container">
+        <div class="carousel-slide active" id="slide-1">
+          <h3>Mission</h3>
+          <p>
+            The Bicol University shall primarily give professional and technical
+            training, and provide advanced and specialized instruction in
+            literature, philosophy, the science and arts, besides providing for
+            the promotion of scientific and technological researches (R.A. 5521,
+            Sec. 3.0).
+          </p>
+        </div>
+        <div class="carousel-slide" id="slide-2">
+          <h3>Vision</h3>
+          <p>
+            A University for Humanity characterized by productive scholarship,
+            transformative leadership, collaborative service and distinctive
+            character for sustainable societies.
+          </p>
+        </div>
+        <!-- Simple Vanilla JS Carousel Indicators -->
+        <div style="margin-top: 1rem">
+          <span
+            style="cursor: pointer; color: var(--bu-blue); font-size: 20px"
+            onclick="showSlide(1)"
+            >●</span
+          >
+          <span
+            style="cursor: pointer; color: var(--bu-blue); font-size: 20px"
+            onclick="showSlide(2)"
+            >●</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <div class="footer-content">
+        <img src="image/bup-logo.png" alt="BUP Logo" class="footer-logo" />
+        <h3 class="footer-title">Bicol University Polangui</h3>
+
+        <div class="social-links">
+          <a
+            href="https://www.facebook.com/p/Bicol-University-Polangui-100090214496015/"
+            target="_blank"
+            aria-label="Facebook"
+          >
+            <i class="fab fa-facebook"></i>
+          </a>
+          <a
+            href="https://www.youtube.com/@TheBicolUniversity"
+            target="_blank"
+            aria-label="YouTube"
+          >
+            <i class="fab fa-youtube"></i>
+          </a>
+          <a
+            href="https://bicol-u.edu.ph/category/bu-polangui/"
+            target="_blank"
+            aria-label="Website"
+          >
+            <i class="fas fa-globe"></i>
+          </a>
+        </div>
+
+        <hr class="footer-divider" />
+        <p class="footer-copyright">
+          &copy; 2025 Bicol University Polangui. All Rights Reserved.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // Simple Vanilla JS Carousel
+      let currentSlide = 1;
+      function showSlide(n) {
+        document
+          .querySelectorAll(".carousel-slide")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById("slide-" + n).classList.add("active");
+        currentSlide = n;
+      }
+
+      // Auto rotate every 5 seconds
+      setInterval(() => {
+        currentSlide = currentSlide === 1 ? 2 : 1;
+        showSlide(currentSlide);
+      }, 5000);
+    </script>
+  </body>
+</html>
