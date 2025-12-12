@@ -47,7 +47,7 @@ $user_id = $_SESSION['user_id'] ?? 0;
         <button class="btn" onclick="toggleSidebar()" style="background:none; color:white; font-size:1.2rem; margin-right:10px;">
             <i class="fas fa-bars"></i>
         </button>
-        <img src="image/school-logo.png" alt="Logo">
+        <img src="image/bup-logo.png" alt="Logo">
         <span>Bicol University SMS</span>
     </div>
 
@@ -80,7 +80,9 @@ $user_id = $_SESSION['user_id'] ?? 0;
     <div class="nav-links">
         <?php if ($role !== 'guest'): ?>
             <span style="display: none; @media (min-width: 768px) { display: inline; }">Welcome, <?php echo htmlspecialchars($username); ?></span>
-            <img src="image.php?type=user&id=<?php echo $user_id; ?>" class="profile-img-small" onerror="this.src='image/male-placeholder.jpg'" alt="Profile">
+            <a href="profile.php" title="Edit Profile">
+                <img src="image.php?type=user&id=<?php echo $user_id; ?>" class="profile-img-small" onerror="this.src='image/male-placeholder.jpg'" alt="Profile">
+            </a>
         <?php else: ?>
             <a href="login.html" class="btn btn-secondary">Login</a>
         <?php endif; ?>

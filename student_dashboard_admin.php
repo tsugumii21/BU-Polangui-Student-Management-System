@@ -29,8 +29,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Create or Update
         $student_id = trim($_POST['student_id']);
         $name = trim($_POST['name']);
+        $email = trim($_POST['email']);
+        $gender = $_POST['gender'];
         $course = trim($_POST['course']);
         $year = $_POST['year_level'];
+        
+        // Determine Department Logic
+        $departments = [
+            'Bachelor of Elementary Education' => 'Education Department',
+            'Bachelor of Secondary Education Major in English' => 'Education Department',
+            'Bachelor of Secondary Education Major in Math' => 'Education Department',
+            
+            'Bachelor of Science in Automotive Technology' => 'Technology Department',
+            'Bachelor of Science in Electrical Technology' => 'Technology Department',
+            'Bachelor of Science in Electronics Technology' => 'Technology Department',
+            'Bachelor of Science in Mechanical Technology' => 'Technology Department',
+            
+            'Bachelor of Science in Computer Engineering' => 'Engineering Department',
+            'Bachelor of Science in Electronics Engineering' => 'Engineering Department',
+            
+            'Bachelor of Science in Entrepreneurship' => 'Entrepreneurship Department',
+            
+            'Bachelor of Science in Information System' => 'Computer Studies Department',
+            'Bachelor of Science in Information Technology' => 'Computer Studies Department',
+            'Bachelor of Science in Information Technology (Animation)' => 'Computer Studies Department',
+            'Bachelor of Science in Computer Science' => 'Computer Studies Department',
+            
+            'Bachelor of Science in Nursing' => 'Nursing Department'
+        ];
+        
+        $department = $departments[$course] ?? 'Unknown Department';
+        
+        $block = $_POST['block'];
         $id = $_POST['id'] ?? null;
         
         // Image Handling
@@ -46,13 +76,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($id) {
                     // Update
                     if ($imageBlob) {
-                        $sql = "UPDATE students SET student_id=?, name=?, course=?, year_level=?, image_blob=? WHERE id=?";
+                        $sql = "UPDATE students SET student_id=?, name=?, email=?, gender=?, department=?, course=?, year_level=?, block=?, image_blob=? WHERE id=?";
                         $stmt = $pdo->prepare($sql);
-                        $stmt->execute([$student_id, $name, $course, $year, $imageBlob, $id]);
+                        $stmt->execute([$student_id, $name, $email, $gender, $department, $course, $year, $block, $imageBlob, $id]);
                     } else {
-                        $sql = "UPDATE students SET student_id=?, name=?, course=?, year_level=? WHERE id=?";
+                        $sql = "UPDATE students SET student_id=?, name=?, email=?, gender=?, department=?, course=?, year_level=?, block=? WHERE id=?";
                         $stmt = $pdo->prepare($sql);
-                        $stmt->execute([$student_id, $name, $course, $year, $id]);
+                        $stmt->execute([$student_id, $name, $email, $gender, $department, $course, $year, $block, $id]);
                     }
                     $message = "Student updated successfully!";
                     // Refresh data
@@ -62,27 +92,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $student = $stmt->fetch();
                 } else {
                     // Create
-                    // Require image for new student? Optional.
                     if ($imageBlob === null) {
-                        // Use a default placeholder or just insert null
-                        // For this assignment, we want BLOBs. 
-                        // Let's create an empty blob or allow null if the schema permits (we set NOT NULL in config comments, but could be flexible).
-                        // Let's assume user must upload or we use a placeholder file.
-                        // I'll allow NULL or empty string if schema allows, but config said NOT NULL.
-                        // So I will read a placeholder if none provided, OR alert user.
-                        // Let's just insert empty string for now if allowed, or error.
-                        // Actually, let's force upload or use default placeholder content.
                         $placeholderPath = 'image/male-placeholder.jpg';
                         if (file_exists($placeholderPath)) {
                             $imageBlob = file_get_contents($placeholderPath);
                         } else {
-                            $imageBlob = ''; // Might fail if strict mode
+                            $imageBlob = ''; 
                         }
                     }
                     
-                    $sql = "INSERT INTO students (student_id, name, course, year_level, image_blob) VALUES (?, ?, ?, ?, ?)";
+                    $sql = "INSERT INTO students (student_id, name, email, gender, department, course, year_level, block, image_blob) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     $stmt = $pdo->prepare($sql);
-                    $stmt->execute([$student_id, $name, $course, $year, $imageBlob]);
+                    $stmt->execute([$student_id, $name, $email, $gender, $department, $course, $year, $block, $imageBlob]);
                     $message = "Student added successfully!";
                 }
             } catch (PDOException $e) {
@@ -169,29 +190,128 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
             </div>
 
             <div class="form-group">
-                <label>Course</label>
-                <select name="course" class="form-control" required>
-                    <option value="">Select Course</option>
-                    <?php 
-                    $courses = ['BS Information Technology', 'BS Computer Science', 'BS Information Systems', 'BS Education', 'BS Nursing', 'BS Accountancy'];
-                    foreach ($courses as $c) {
-                        $selected = ($student['course'] ?? '') === $c ? 'selected' : '';
-                        echo "<option value=\"$c\" $selected>$c</option>";
-                    }
-                    ?>
+                <label>Email Address</label>
+                <input type="email" name="email" class="form-control" required value="<?php echo htmlspecialchars($student['email'] ?? ''); ?>" placeholder="example@bicol-u.edu.ph">
+            </div>
+
+            <div class="form-group">
+                <label>Gender</label>
+                <select name="gender" class="form-control" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male" <?php echo ($student['gender'] ?? '') === 'Male' ? 'selected' : ''; ?>>Male</option>
+                    <option value="Female" <?php echo ($student['gender'] ?? '') === 'Female' ? 'selected' : ''; ?>>Female</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>Year Level</label>
-                <select name="year_level" class="form-control" required>
-                    <?php 
-                    for ($i = 1; $i <= 4; $i++) {
-                        $selected = ($student['year_level'] ?? '') == $i ? 'selected' : '';
-                        echo "<option value=\"$i\" $selected>$i</option>";
-                    }
-                    ?>
+                <label>Course</label>
+                <select name="course" id="courseSelect" class="form-control" required onchange="updateDepartment()">
+                    <option value="">Select Course</option>
+                    
+                    <optgroup label="Education Department">
+                        <option value="Bachelor of Elementary Education">Bachelor of Elementary Education</option>
+                        <option value="Bachelor of Secondary Education Major in English">Bachelor of Secondary Education Major in English</option>
+                        <option value="Bachelor of Secondary Education Major in Math">Bachelor of Secondary Education Major in Math</option>
+                    </optgroup>
+
+                    <optgroup label="Technology Department">
+                        <option value="Bachelor of Science in Automotive Technology">Bachelor of Science in Automotive Technology</option>
+                        <option value="Bachelor of Science in Electrical Technology">Bachelor of Science in Electrical Technology</option>
+                        <option value="Bachelor of Science in Electronics Technology">Bachelor of Science in Electronics Technology</option>
+                        <option value="Bachelor of Science in Mechanical Technology">Bachelor of Science in Mechanical Technology</option>
+                    </optgroup>
+
+                    <optgroup label="Engineering Department">
+                        <option value="Bachelor of Science in Computer Engineering">Bachelor of Science in Computer Engineering</option>
+                        <option value="Bachelor of Science in Electronics Engineering">Bachelor of Science in Electronics Engineering</option>
+                    </optgroup>
+
+                    <optgroup label="Entrepreneurship Department">
+                        <option value="Bachelor of Science in Entrepreneurship">Bachelor of Science in Entrepreneurship</option>
+                    </optgroup>
+
+                    <optgroup label="Computer Studies Department">
+                        <option value="Bachelor of Science in Information System">Bachelor of Science in Information System</option>
+                        <option value="Bachelor of Science in Information Technology">Bachelor of Science in Information Technology</option>
+                        <option value="Bachelor of Science in Information Technology (Animation)">Bachelor of Science in Information Technology (Animation)</option>
+                        <option value="Bachelor of Science in Computer Science">Bachelor of Science in Computer Science</option>
+                    </optgroup>
+
+                    <optgroup label="Nursing Department">
+                        <option value="Bachelor of Science in Nursing">Bachelor of Science in Nursing</option>
+                    </optgroup>
                 </select>
+                <script>
+                    // Pre-select course for edit mode
+                    <?php if ($editMode && !empty($student['course'])): ?>
+                        document.getElementById('courseSelect').value = "<?php echo $student['course']; ?>";
+                    <?php endif; ?>
+                </script>
+            </div>
+
+            <div class="form-group">
+                <label>Department (Auto-assigned)</label>
+                <input type="text" id="departmentDisplay" class="form-control" readonly value="<?php echo htmlspecialchars($student['department'] ?? ''); ?>" style="background-color: #e9ecef;">
+            </div>
+
+            <script>
+                const courseMap = {
+                    'Bachelor of Elementary Education': 'Education Department',
+                    'Bachelor of Secondary Education Major in English': 'Education Department',
+                    'Bachelor of Secondary Education Major in Math': 'Education Department',
+                    
+                    'Bachelor of Science in Automotive Technology': 'Technology Department',
+                    'Bachelor of Science in Electrical Technology': 'Technology Department',
+                    'Bachelor of Science in Electronics Technology': 'Technology Department',
+                    'Bachelor of Science in Mechanical Technology': 'Technology Department',
+                    
+                    'Bachelor of Science in Computer Engineering': 'Engineering Department',
+                    'Bachelor of Science in Electronics Engineering': 'Engineering Department',
+                    
+                    'Bachelor of Science in Entrepreneurship': 'Entrepreneurship Department',
+                    
+                    'Bachelor of Science in Information System': 'Computer Studies Department',
+                    'Bachelor of Science in Information Technology': 'Computer Studies Department',
+                    'Bachelor of Science in Information Technology (Animation)': 'Computer Studies Department',
+                    'Bachelor of Science in Computer Science': 'Computer Studies Department',
+                    
+                    'Bachelor of Science in Nursing': 'Nursing Department'
+                };
+
+                function updateDepartment() {
+                    const course = document.getElementById('courseSelect').value;
+                    const deptInput = document.getElementById('departmentDisplay');
+                    deptInput.value = courseMap[course] || '';
+                }
+                
+                // Initialize on load if course is selected
+                document.addEventListener('DOMContentLoaded', updateDepartment);
+            </script>
+
+            <div class="form-group" style="display: flex; gap: 20px;">
+                <div style="flex: 1;">
+                    <label>Year Level</label>
+                    <select name="year_level" class="form-control" required>
+                        <?php 
+                        for ($i = 1; $i <= 4; $i++) {
+                            $selected = ($student['year_level'] ?? '') == $i ? 'selected' : '';
+                            echo "<option value=\"$i\" $selected>$i</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <label>Block / Section</label>
+                    <select name="block" class="form-control" required>
+                        <option value="">Select Block</option>
+                        <?php 
+                        for ($i = 1; $i <= 3; $i++) {
+                            $selected = ($student['block'] ?? '') == $i ? 'selected' : '';
+                            echo "<option value=\"$i\" $selected>Block $i</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary"><?php echo $editMode ? 'Update Student' : 'Add Student'; ?></button>
@@ -199,4 +319,3 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
     </div>
 </body>
 </html>
-

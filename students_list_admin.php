@@ -41,8 +41,12 @@ try {
                         <th>Image</th>
                         <th>Student ID</th>
                         <th>Name</th>
+                        <th>Email</th>
+                        <th>Gender</th>
+                        <th>Department</th>
                         <th>Course</th>
                         <th>Year</th>
+                        <th>Block</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -55,8 +59,12 @@ try {
                             </td>
                             <td><?php echo htmlspecialchars($student['student_id']); ?></td>
                             <td><?php echo htmlspecialchars($student['name']); ?></td>
+                            <td><?php echo htmlspecialchars($student['email'] ?? ''); ?></td>
+                            <td><?php echo htmlspecialchars($student['gender'] ?? ''); ?></td>
+                            <td><?php echo htmlspecialchars($student['department'] ?? ''); ?></td>
                             <td><?php echo htmlspecialchars($student['course']); ?></td>
                             <td><?php echo htmlspecialchars($student['year_level']); ?></td>
+                            <td><?php echo htmlspecialchars($student['block'] ?? ''); ?></td>
                             <td>
                                 <a href="student_dashboard_admin.php?action=edit&id=<?php echo $student['id']; ?>" class="btn btn-primary" style="padding: 5px 10px; font-size: 0.9rem;">Edit</a>
                                 <form action="student_dashboard_admin.php" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this student?');">

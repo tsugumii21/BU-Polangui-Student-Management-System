@@ -18,8 +18,12 @@
  *    - id (INT, AUTO_INCREMENT, PRIMARY KEY)
  *    - student_id (VARCHAR(20), UNIQUE, NOT NULL)
  *    - name (VARCHAR(100), NOT NULL)
+ *    - email (VARCHAR(100), NOT NULL)
+ *    - gender (ENUM('Male', 'Female'), NOT NULL)
+ *    - department (VARCHAR(100), NOT NULL) -- Added field
  *    - course (VARCHAR(100), NOT NULL)
  *    - year_level (INT, NOT NULL)
+ *    - block (INT, NOT NULL) -- Added field (1, 2, or 3)
  *    - image_blob (LONGBLOB, NOT NULL) -- For student photo
  *    - created_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
  */
@@ -47,4 +51,3 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 ?>
-
