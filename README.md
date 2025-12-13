@@ -79,7 +79,7 @@ The **Bicol University Polangui S.M.S** is a robust web application designed to 
     - Open **XAMPP Control Panel** -> Start **Apache** & **MySQL**.
     - Go to `http://localhost/phpmyadmin/`.
     - Create a database named: **`student_management_db`**.
-    - Import the **`database/setup.sql`** file provided in the project.
+    - Import the **`database/student_management_db.sql`** file provided in the project.
 
 3.  **Configure (Optional)**
 
@@ -109,6 +109,25 @@ student_management_system/
 │   └── *.php         # Application Views
 └── README.md         # Documentation
 ```
+
+---
+
+## 👥 Development Team
+
+**BSIT-3A**
+
+- **Leader:** Allen Del Valle
+- **Members:**
+  - Michael Justin Surbano
+  - Asthan Eilexer Patanao
+  - Carlo Delos Santos
+  - John Roan Ballester
+
+---
+
+## ⚠️ Disclaimer
+
+This project is developed for **educational purposes only**. It is an independent project and is **not affiliated, associated, authorized, endorsed by, or in any way officially connected** with Bicol University Polangui or any of its subsidiaries or its affiliates. The official Bicol University website can be found at [bicol-u.edu.ph](https://bicol-u.edu.ph).
 
 ---
 
