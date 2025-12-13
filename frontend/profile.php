@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php 
             $backLink = ($user['role'] === 'admin') ? 'index_admin.php' : 'index_user.php';
             ?>
-            <a href="<?php echo $backLink; ?>" class="btn btn-secondary">Back to Dashboard</a>
+            <a href="<?php echo $backLink; ?>" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
         </div>
 
         <?php if ($message): ?>

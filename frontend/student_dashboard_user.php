@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <h2 style="margin-bottom: 5px;"><?php echo $viewMode ? 'Student Details' : 'Add New Student'; ?></h2>
                 <p style="color: var(--text-secondary);"><?php echo $viewMode ? 'View student information' : 'Fill in the details below'; ?></p>
             </div>
-            <a href="students_list_user.php" class="btn btn-secondary">Back to List</a>
+            <a href="students_list_user.php" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to List</a>
         </div>
 
         <?php if ($message): ?>

@@ -76,7 +76,10 @@ try {
                 <h2>Students Directory</h2>
                 <p style="color: var(--text-secondary);">Browse student records</p>
             </div>
-            <a href="student_dashboard_user.php" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Add New Student</a>
+            <div style="display: flex; gap: 10px;">
+                <a href="index_user.php" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+                <a href="student_dashboard_user.php" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Add New Student</a>
+            </div>
         </div>
         
         <!-- Advanced Filter & Sort Bar -->
