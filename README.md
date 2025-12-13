@@ -32,9 +32,10 @@ The **Bicol University Polangui S.M.S** is a robust web application designed to 
 - **Student Management:**
   - Add new students with **auto-assigned departments** based on course selection.
   - Comprehensive editing (Name, ID, Course, Year, Block, Gender).
+  - Delete student records.
   - Secure profile photo management (stored as BLOBs).
 - **Directory Control:**
-  - Delete records and manage data integrity.
+  - Full control to manage data integrity.
 
 ### 📂 Students Directory
 
@@ -44,7 +45,10 @@ The **Bicol University Polangui S.M.S** is a robust web application designed to 
 
 ### 👤 User Dashboard
 
-- **Read-Only Access:** Browse student directories securely.
+- **Overview Statistics:** Real-time view of total students and recent activity.
+- **Student Management:**
+  - Add new students with **auto-assigned departments**.
+  - **Read-Only Mode:** Users cannot edit or delete existing student records.
 - **Profile Management:** Update personal credentials and profile avatar.
 - **Simplified Interface:** Focused view for non-admin users.
 
