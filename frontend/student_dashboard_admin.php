@@ -25,6 +25,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $error = "Error deleting student: " . $e->getMessage();
         }
+    } elseif ($action === 'delete_photo') {
+        $id = $_POST['id'] ?? 0;
+        try {
+            // Clear the image blob
+            $stmt = $pdo->prepare("UPDATE students SET image_blob = '' WHERE id = ?");
+            $stmt->execute([$id]);
+            // Redirect back to edit page to refresh the view
+            header("Location: student_dashboard_admin.php?action=edit&id=" . $id);
+            exit();
+        } catch (PDOException $e) {
+            $error = "Error removing photo: " . $e->getMessage();
+        }
     } else {
         // Create or Update
         $student_id = trim($_POST['student_id']);
@@ -196,6 +208,12 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
                     <input type="file" id="imageUpload" name="image" style="display: none;" accept="image/*" onchange="previewImage(this)">
                 </div>
                 <p style="margin-top: 10px; color: var(--text-secondary); font-size: 0.9rem;">Upload Student Photo</p>
+                
+                <?php if ($editMode && !empty($student['image_blob'])): ?>
+                    <button type="submit" name="action" value="delete_photo" class="btn" style="background: transparent; border: 1px solid #dc3545; color: #dc3545; font-size: 0.85rem; padding: 6px 12px; margin-top: 10px; border-radius: 6px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#dc3545'; this.style.color='white';" onmouseout="this.style.background='transparent'; this.style.color='#dc3545';" formnovalidate onclick="return confirm('Are you sure you want to remove the student\'s photo?');">
+                        <i class="fas fa-trash-alt"></i> Remove Photo
+                    </button>
+                <?php endif; ?>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
