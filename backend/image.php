@@ -1,5 +1,5 @@
 <?php
-require_once 'config.php';
+require_once '../database/config.php';
 
 // Check for required parameters
 if (!isset($_GET['type']) || !isset($_GET['id'])) {
@@ -18,21 +18,25 @@ if (!is_numeric($id)) {
 
 try {
     if ($type === 'student') {
-        // Fetch student image
-        $stmt = $pdo->prepare("SELECT image_blob FROM students WHERE id = ?");
+        // Fetch student image and gender
+        $stmt = $pdo->prepare("SELECT image_blob, gender FROM students WHERE id = ?");
         $stmt->execute([$id]);
         $row = $stmt->fetch();
 
         if ($row && !empty($row['image_blob'])) {
-            // Detect MIME type? 
-            // BLOBs usually don't store MIME type separately unless you have a column for it.
-            // For simplicity, browsers are good at sniffing, but we should try to output a generic header 
-            // or detect signatures if we want to be strict.
-            // A standard approach without mime column is to just output image/jpeg or image/png
-            // and let the browser handle it.
             header("Content-Type: image/jpeg"); 
             echo $row['image_blob'];
             exit();
+        } else if ($row) {
+            // Found student but no image_blob, serve placeholder based on gender
+            $gender = $row['gender'] ?? 'Male'; // Default to Male if null
+            $placeholder = ($gender === 'Female') ? '../frontend/images/female-placeholder.jpg' : '../frontend/images/male-placeholder.jpg';
+            
+            if (file_exists($placeholder)) {
+                header("Content-Type: image/jpeg");
+                readfile($placeholder);
+                exit();
+            }
         }
     } elseif ($type === 'user') {
         // Fetch user profile image
@@ -50,18 +54,13 @@ try {
     // Silent fail or 404
 }
 
-// Fallback image if not found or empty
-// We can either redirect to a placeholder or output one
-// Let's redirect to a placeholder file based on type, or read it and output it.
-// Reading and outputting ensures the URL remains image.php?...
-
-$placeholder = 'image/male-placeholder.jpg'; // Default
+// Fallback image if not found or empty (and no student found logic triggered)
+// For users or general errors, default to male placeholder or a generic one
+$placeholder = '../frontend/images/male-placeholder.jpg'; 
 if (file_exists($placeholder)) {
     header("Content-Type: image/jpeg");
     readfile($placeholder);
 } else {
-    // If no placeholder file exists, output a 1x1 pixel or nothing
     header("HTTP/1.0 404 Not Found");
 }
 ?>
-

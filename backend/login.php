@@ -1,13 +1,13 @@
 <?php
 session_start();
-require_once 'config.php';
+require_once '../database/config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
 
     if (empty($username) || empty($password)) {
-        header("Location: login.html?error=empty");
+        header("Location: ../frontend/login.html?error=empty");
         exit();
     }
 
@@ -24,24 +24,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Redirect based on role
             if ($user['role'] === 'admin') {
-                header("Location: index_admin.php");
+                header("Location: ../frontend/index_admin.php");
             } else {
-                header("Location: index_user.php");
+                header("Location: ../frontend/index_user.php");
             }
             exit();
         } else {
             // Invalid credentials
-            header("Location: login.html?error=invalid");
+            header("Location: ../frontend/login.html?error=invalid");
             exit();
         }
     } catch (PDOException $e) {
         // Log error and show generic message
         error_log("Login Error: " . $e->getMessage());
-        header("Location: login.html?error=system");
+        header("Location: ../frontend/login.html?error=system");
         exit();
     }
 } else {
-    header("Location: login.html");
+    header("Location: ../frontend/login.html");
     exit();
 }
 ?>

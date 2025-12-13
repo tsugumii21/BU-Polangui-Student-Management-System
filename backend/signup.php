@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config.php';
+require_once '../database/config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
@@ -9,12 +9,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Basic Validation
     if (empty($username) || empty($password)) {
-        header("Location: signup.html?error=empty");
+        header("Location: ../frontend/signup.html?error=empty");
         exit();
     }
 
     if ($password !== $confirm_password) {
-        header("Location: signup.html?error=mismatch");
+        header("Location: ../frontend/signup.html?error=mismatch");
         exit();
     }
 
@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
         $stmt->execute([$username]);
         if ($stmt->fetch()) {
-            header("Location: signup.html?error=exists");
+            header("Location: ../frontend/signup.html?error=exists");
             exit();
         }
 
@@ -36,20 +36,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $stmt = $pdo->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, 'user')");
         if ($stmt->execute([$username, $hashed_password])) {
-            header("Location: login.html?error=created");
+            header("Location: ../frontend/login.html?error=created");
             exit();
         } else {
-            header("Location: signup.html?error=system");
+            header("Location: ../frontend/signup.html?error=system");
             exit();
         }
 
     } catch (PDOException $e) {
         error_log("Signup Error: " . $e->getMessage());
-        header("Location: signup.html?error=system");
+        header("Location: ../frontend/signup.html?error=system");
         exit();
     }
 } else {
-    header("Location: signup.html");
+    header("Location: ../frontend/signup.html");
     exit();
 }
 ?>

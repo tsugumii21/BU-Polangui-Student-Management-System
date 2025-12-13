@@ -4,7 +4,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'user') {
     header("Location: login.html");
     exit();
 }
-require_once 'config.php';
+require_once '../database/config.php';
 
 $message = '';
 $error = '';
@@ -77,7 +77,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
              // Require image or placeholder
              if ($imageBlob === null) {
-                $placeholderPath = 'image/male-placeholder.jpg';
+                $placeholderPath = '../frontend/images/male-placeholder.jpg';
+                if ($gender === 'Female') {
+                    $placeholderPath = '../frontend/images/female-placeholder.jpg';
+                }
+
                 if (file_exists($placeholderPath)) {
                     $imageBlob = file_get_contents($placeholderPath);
                 } else {
@@ -105,12 +109,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $viewMode ? 'Student Details' : 'Add Student'; ?> | BU SMS</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <?php include 'header_offcanvas.php'; ?>
+    <?php include 'includes/header_offcanvas.php'; ?>
 
     <div class="container" style="padding-top: 3rem; padding-bottom: 3rem; max-width: 800px;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
@@ -137,14 +141,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             <div style="text-align: center; margin-bottom: 30px;">
                 <?php if ($viewMode): ?>
-                    <img src="image.php?type=student&id=<?php echo $student['id']; ?>" style="width: 150px; height: 150px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+                    <img src="../backend/image.php?type=student&id=<?php echo $student['id']; ?>" style="width: 150px; height: 150px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
                 <?php else: ?>
                     <div class="profile-upload-container" style="position: relative; display: inline-block; cursor: pointer;">
-                        <img src="image/male-placeholder.jpg" style="width: 140px; height: 140px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);" id="previewImg">
+                        <img src="images/male-placeholder.jpg" style="width: 140px; height: 140px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);" id="previewImg" onerror="this.src='images/male-placeholder.jpg'">
                         <label for="imageUpload" class="profile-upload-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); border-radius: 12px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; color: white;">
                             <i class="fas fa-camera fa-2x"></i>
                         </label>
-                        <input type="file" id="imageUpload" name="image" style="display: none;" accept="image/*" required onchange="previewImage(this)">
+                        <input type="file" id="imageUpload" name="image" style="display: none;" accept="image/*" onchange="previewImage(this)">
                     </div>
                     <p style="margin-top: 10px; color: var(--text-secondary); font-size: 0.9rem;">Upload Student Photo</p>
                 <?php endif; ?>

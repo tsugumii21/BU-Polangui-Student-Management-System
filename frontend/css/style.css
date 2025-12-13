@@ -513,3 +513,106 @@ h1, h2, h3, h4, h5, h6 {
 #searchResults::-webkit-scrollbar-thumb:hover {
     background: #bbb;
 }
+
+/* Advanced Filter Bar */
+.filter-bar-container {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--card-radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+}
+
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 20px;
+}
+
+.filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.filter-item label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--bu-blue);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.filter-select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 10px 20px;
+    padding-right: 35px; /* Space for arrow */
+    border-radius: 50px;
+    border: 1px solid var(--border-color);
+    background-color: #f8f9fa;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 140px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236c757d' d='M6 8.825L1.175 4 2.238 2.938 6 6.7l3.763-3.762L10.825 4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+}
+
+.filter-select:hover {
+    border-color: var(--bu-blue);
+    background-color: white;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--bu-blue);
+    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
+    background-color: white;
+}
+
+.filter-separator {
+    width: 1px;
+    height: 45px;
+    background-color: var(--border-color);
+    margin: 0 5px;
+}
+
+.filter-reset {
+    margin-left: auto; /* Pushes to the right */
+}
+
+.btn-reset {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;
+    height: auto;
+    width: auto;
+    border-radius: 50px;
+    background-color: transparent;
+    color: var(--bu-orange);
+    border: 1px solid var(--bu-orange);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    gap: 8px;
+}
+
+.btn-reset:hover {
+    background-color: var(--bu-orange);
+    color: white;
+}

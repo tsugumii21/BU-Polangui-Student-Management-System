@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign Up | Student Management System</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>Login | Student Management System</title>
+    <link rel="stylesheet" href="css/style.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -23,8 +23,8 @@
             text-decoration: none;
           "
         >
-          <img src="image/bup-logo.png" alt="BU Logo" />
-          <span style="font-weight: 700">Bicol University S.M.S</span>
+          <img src="images/bup-logo.png" alt="BU Logo" />
+          <span style="font-weight: 700">Bicol University Polangui S.M.S</span>
         </a>
       </div>
       <div class="nav-links">
@@ -40,13 +40,14 @@
     <div class="auth-container">
       <div class="auth-card">
         <div style="text-align: center; margin-bottom: 2rem">
-          <img src="image/bup-logo.png" alt="Logo" style="height: 80px" />
+          <img src="images/bup-logo.png" alt="Logo" style="height: 80px" />
           <h2 style="color: var(--bu-blue); font-weight: 700; margin-top: 10px">
-            Create Account
+            Login
           </h2>
-          <p>Join the student management community.</p>
+          <p>Welcome back! Please access your account.</p>
         </div>
 
+        <!-- Error parameter handling via JS if needed, or simple redirect back -->
         <div
           id="errorMessage"
           style="
@@ -56,13 +57,11 @@
             display: none;
             font-weight: 700;
           "
-        ></div>
-
-        <form
-          action="signup.php"
-          method="POST"
-          onsubmit="return validateSignup()"
         >
+          Invalid credentials
+        </div>
+
+        <form action="../backend/login.php" method="POST">
           <div class="form-group">
             <label for="username" style="font-weight: 700">Username</label>
             <div style="position: relative">
@@ -72,8 +71,7 @@
                 name="username"
                 class="form-control"
                 required
-                placeholder="Choose a username"
-                minlength="4"
+                placeholder="Enter your username"
               />
               <i
                 class="fas fa-user"
@@ -91,28 +89,7 @@
                 name="password"
                 class="form-control"
                 required
-                placeholder="Create a password (min 6 chars)"
-                minlength="6"
-              />
-              <i
-                class="fas fa-lock"
-                style="position: absolute; right: 10px; top: 12px; color: #999"
-              ></i>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="confirm_password" style="font-weight: 700"
-              >Confirm Password</label
-            >
-            <div style="position: relative">
-              <input
-                type="password"
-                id="confirm_password"
-                name="confirm_password"
-                class="form-control"
-                required
-                placeholder="Repeat password"
+                placeholder="Enter your password"
               />
               <i
                 class="fas fa-lock"
@@ -126,17 +103,17 @@
             class="btn btn-primary"
             style="width: 100%; padding: 12px; font-size: 1.1rem"
           >
-            Sign Up
+            Login
           </button>
         </form>
 
         <div style="text-align: center; margin-top: 1.5rem">
           <p>
-            Already have an account?
+            Don't have an account?
             <a
-              href="login.html"
+              href="signup.html"
               style="color: var(--bu-orange); font-weight: 700"
-              >Login</a
+              >Sign Up</a
             >
           </p>
         </div>
@@ -144,27 +121,16 @@
     </div>
 
     <script>
-      function validateSignup() {
-        const p1 = document.getElementById("password").value;
-        const p2 = document.getElementById("confirm_password").value;
-        const err = document.getElementById("errorMessage");
-
-        if (p1 !== p2) {
-          err.style.display = "block";
-          err.textContent = "Passwords do not match!";
-          return false;
-        }
-        return true;
-      }
-
+      // Simple script to show error if in URL
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.has("error")) {
         const err = document.getElementById("errorMessage");
         err.style.display = "block";
-        if (urlParams.get("error") === "exists") {
-          err.textContent = "Username already exists.";
-        } else if (urlParams.get("error") === "system") {
-          err.textContent = "System error. Please try again.";
+        if (urlParams.get("error") === "invalid") {
+          err.textContent = "Invalid username or password.";
+        } else if (urlParams.get("error") === "created") {
+          err.style.color = "#28a745";
+          err.textContent = "Account created! Please login.";
         }
       }
     </script>

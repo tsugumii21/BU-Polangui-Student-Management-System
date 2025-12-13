@@ -4,7 +4,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header("Location: login.html");
     exit();
 }
-require_once 'config.php';
+require_once '../database/config.php';
 
 $editMode = false;
 $student = null;
@@ -93,7 +93,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     // Create
                     if ($imageBlob === null) {
-                        $placeholderPath = 'image/male-placeholder.jpg';
+                        $placeholderPath = 'images/male-placeholder.jpg';
+                        if ($gender === 'Female') {
+                            $placeholderPath = 'images/female-placeholder.jpg';
+                        }
+                        
+                        // Note: Backend script runs in backend/, so path to placeholder is relative to backend/
+                        // But images are in frontend/images/
+                        $placeholderPath = '../frontend/images/male-placeholder.jpg';
+                        if ($gender === 'Female') {
+                            $placeholderPath = '../frontend/images/female-placeholder.jpg';
+                        }
+
                         if (file_exists($placeholderPath)) {
                             $imageBlob = file_get_contents($placeholderPath);
                         } else {
@@ -140,12 +151,12 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $editMode ? 'Edit' : 'Add'; ?> Student | BU SMS</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <?php include 'header_offcanvas.php'; ?>
+    <?php include 'includes/header_offcanvas.php'; ?>
 
     <div class="container" style="padding-top: 3rem; padding-bottom: 3rem; max-width: 800px;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
@@ -175,10 +186,10 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
                 <div class="profile-upload-container" style="position: relative; display: inline-block; cursor: pointer;">
                     <?php 
                     $imgSrc = ($editMode && !empty($student['image_blob'])) 
-                        ? "image.php?type=student&id={$student['id']}" 
-                        : "image/male-placeholder.jpg"; 
+                        ? "../backend/image.php?type=student&id={$student['id']}" 
+                        : "images/male-placeholder.jpg"; 
                     ?>
-                    <img src="<?php echo $imgSrc; ?>" style="width: 140px; height: 140px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);" id="previewImg">
+                    <img src="<?php echo $imgSrc; ?>" style="width: 140px; height: 140px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);" id="previewImg" onerror="this.src='images/male-placeholder.jpg'">
                     <label for="imageUpload" class="profile-upload-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); border-radius: 12px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; color: white;">
                         <i class="fas fa-camera fa-2x"></i>
                     </label>

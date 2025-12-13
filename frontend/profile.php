@@ -4,7 +4,7 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login.html");
     exit();
 }
-require_once 'config.php';
+require_once '../database/config.php';
 
 $user_id = $_SESSION['user_id'];
 $message = '';
@@ -90,12 +90,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile | BU SMS</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <?php include 'header_offcanvas.php'; ?>
+    <?php include 'includes/header_offcanvas.php'; ?>
 
     <div class="container" style="padding-top: 3rem; max-width: 700px;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             <div style="text-align: center; margin-bottom: 30px; position: relative;">
                 <div class="profile-upload-container" style="position: relative; display: inline-block; cursor: pointer;">
-                    <img src="image.php?type=user&id=<?php echo $user_id; ?>" style="width: 140px; height: 140px; object-fit: cover; border-radius: 50%; border: 5px solid var(--bu-blue); box-shadow: 0 5px 15px rgba(0,0,0,0.15);" onerror="this.src='image/male-placeholder.jpg'">
+                    <img src="../backend/image.php?type=user&id=<?php echo $user_id; ?>" style="width: 140px; height: 140px; object-fit: cover; border-radius: 50%; border: 5px solid var(--bu-blue); box-shadow: 0 5px 15px rgba(0,0,0,0.15);" onerror="this.src='images/male-placeholder.jpg'">
                     <label for="imageUpload" class="profile-upload-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; color: white;">
                         <i class="fas fa-camera fa-2x"></i>
                     </label>
