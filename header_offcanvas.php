@@ -53,23 +53,12 @@ $user_id = $_SESSION['user_id'] ?? 0;
 
     <!-- Global Search UI (Only for logged in) -->
     <?php if ($role !== 'guest'): ?>
-    <div class="search-container" style="flex:1; max-width:400px; margin:0 20px; display: none;" id="headerSearchBox">
-        <!-- Visible on larger screens, hidden on mobile via CSS if needed -->
-        <input type="text" id="globalSearch" class="search-input" placeholder="Search students..." onkeyup="handleGlobalSearch(this.value)">
-        <div id="globalSearchResults" style="
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            color: black;
-            border: 1px solid #ddd;
-            border-radius: 0 0 4px 4px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 100;
-            display: none;
-        "></div>
+    <div class="search-container" id="headerSearchBox" style="display: none;">
+        <div class="search-input-wrapper">
+            <input type="text" id="globalSearch" class="search-input" placeholder="Search students by name or ID..." onkeyup="handleGlobalSearch(this.value)">
+            <i class="fas fa-search search-icon-overlay"></i>
+        </div>
+        <div id="globalSearchResults"></div>
     </div>
     <script>
         // Show search box via JS to ensure it's functional

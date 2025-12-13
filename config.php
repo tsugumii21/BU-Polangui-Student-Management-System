@@ -23,7 +23,7 @@
  *    - department (VARCHAR(100), NOT NULL) -- Added field
  *    - course (VARCHAR(100), NOT NULL)
  *    - year_level (INT, NOT NULL)
- *    - block (INT, NOT NULL) -- Added field (1, 2, or 3)
+ *    - block (VARCHAR(10), NOT NULL) -- Changed to letters (A, B, C)
  *    - image_blob (LONGBLOB, NOT NULL) -- For student photo
  *    - created_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
  */

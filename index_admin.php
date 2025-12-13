@@ -30,20 +30,20 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | BU SMS</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <?php include 'header_offcanvas.php'; ?>
 
-    <div class="container" style="padding-top: 2rem; padding-bottom: 2rem;">
-        <!-- Welcome Header -->
-        <div class="dashboard-header">
-            <div style="flex: 1;">
-                <h2 style="margin-bottom: 5px;">Admin Dashboard</h2>
-                <p>Overview of system statistics and recent activities.</p>
-            </div>
-            <div style="text-align: right;">
-                <p style="font-weight: bold;"><?php echo date('F j, Y'); ?></p>
+    <div class="container" style="padding-top: 2rem; padding-bottom: 3rem;">
+        
+        <!-- Welcome Hero Section -->
+        <div class="dashboard-hero">
+            <img src="image.php?type=user&id=<?php echo $_SESSION['user_id']; ?>" onerror="this.src='image/male-placeholder.jpg'" alt="Admin">
+            <div>
+                <h2>Welcome back, Admin!</h2>
+                <p>Manage your students and system users efficiently from this dashboard.</p>
             </div>
         </div>
 
@@ -72,12 +72,12 @@ try {
             </div>
 
             <!-- Action Stat -->
-            <a href="student_dashboard_admin.php" class="stat-card" style="text-decoration: none; border-left: 5px solid #28a745;">
+            <a href="student_dashboard_admin.php" class="stat-card" style="text-decoration: none; border-left: 4px solid #28a745;">
                 <div class="stat-icon" style="background-color: #28a745;">
                     <i class="fas fa-plus"></i>
                 </div>
                 <div class="stat-info">
-                    <h3 style="font-size: 1.5rem;">Add New</h3>
+                    <h3 style="font-size: 1.5rem; color: #28a745;">Add New</h3>
                     <p>Student Entry</p>
                 </div>
             </a>
@@ -85,42 +85,43 @@ try {
 
         <!-- Recent Activity -->
         <div class="recent-activity-section">
-            <div class="section-header">
-                <h3>Recently Added Students</h3>
-                <a href="students_list_admin.php" class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 15px;">View All</a>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="margin:0; color: var(--bu-blue);">Recently Added Students</h3>
+                <a href="students_list_admin.php" class="btn btn-secondary" style="font-size: 0.85rem;">View All Directory</a>
             </div>
             
             <div class="table-responsive">
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Image</th>
-                            <th>Student ID</th>
-                            <th>Name</th>
+                            <th>Student</th>
+                            <th>ID Number</th>
                             <th>Course</th>
+                            <th>Department</th>
                             <th>Date Added</th>
-                            <th>Action</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (count($recent_students) > 0): ?>
                             <?php foreach ($recent_students as $student): ?>
                             <tr>
-                                <td>
-                                    <img src="image.php?type=student&id=<?php echo $student['id']; ?>" class="profile-img-small" onerror="this.src='image/male-placeholder.jpg'">
+                                <td style="display: flex; align-items: center; gap: 12px;">
+                                    <img src="image.php?type=student&id=<?php echo $student['id']; ?>" class="student-img-thumb" onerror="this.src='image/male-placeholder.jpg'">
+                                    <span style="font-weight: 600;"><?php echo htmlspecialchars($student['name']); ?></span>
                                 </td>
-                                <td><?php echo htmlspecialchars($student['student_id']); ?></td>
-                                <td><?php echo htmlspecialchars($student['name']); ?></td>
+                                <td><span style="background: #e9ecef; padding: 4px 8px; border-radius: 4px; font-family: monospace; font-size: 0.9rem;"><?php echo htmlspecialchars($student['student_id']); ?></span></td>
                                 <td><?php echo htmlspecialchars($student['course']); ?></td>
+                                <td><small style="color: var(--text-secondary);"><?php echo htmlspecialchars($student['department']); ?></small></td>
                                 <td><?php echo date('M d, Y', strtotime($student['created_at'])); ?></td>
                                 <td>
-                                    <a href="student_dashboard_admin.php?action=edit&id=<?php echo $student['id']; ?>" style="color: var(--bu-blue);"><i class="fas fa-edit"></i></a>
+                                    <a href="student_dashboard_admin.php?action=edit&id=<?php echo $student['id']; ?>" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;"><i class="fas fa-edit"></i> Edit</a>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="6" style="text-align:center;">No recent activity.</td>
+                                <td colspan="6" style="text-align:center; padding: 2rem; color: #999;">No recent students found.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>

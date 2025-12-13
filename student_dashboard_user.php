@@ -28,7 +28,7 @@ if (isset($_GET['id'])) {
     }
 }
 
-// Handle POST for Create (Users can only Add, not Edit/Delete usually, or based on prompt "Add students or View details")
+// Handle POST for Create
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $student_id = trim($_POST['student_id']);
     $name = trim($_POST['name']);
@@ -106,68 +106,80 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $viewMode ? 'Student Details' : 'Add Student'; ?> | BU SMS</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <?php include 'header_offcanvas.php'; ?>
 
-    <div class="container" style="padding-top: 2rem; max-width: 800px;">
+    <div class="container" style="padding-top: 3rem; padding-bottom: 3rem; max-width: 800px;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
-            <h2><?php echo $viewMode ? 'Student Details' : 'Add New Student'; ?></h2>
+            <div>
+                <h2 style="margin-bottom: 5px;"><?php echo $viewMode ? 'Student Details' : 'Add New Student'; ?></h2>
+                <p style="color: var(--text-secondary);"><?php echo $viewMode ? 'View student information' : 'Fill in the details below'; ?></p>
+            </div>
             <a href="students_list_user.php" class="btn btn-secondary">Back to List</a>
         </div>
 
         <?php if ($message): ?>
-            <div style="padding: 15px; background: #d4edda; color: #155724; border-radius: 4px; margin-bottom: 20px;">
-                <?php echo $message; ?>
+            <div style="padding: 15px; background: #d4edda; color: #155724; border-radius: 8px; margin-bottom: 20px; border: 1px solid #c3e6cb;">
+                <i class="fas fa-check-circle"></i> <?php echo $message; ?>
             </div>
         <?php endif; ?>
 
         <?php if ($error): ?>
-            <div style="padding: 15px; background: #f8d7da; color: #721c24; border-radius: 4px; margin-bottom: 20px;">
-                <?php echo $error; ?>
+            <div style="padding: 15px; background: #f8d7da; color: #721c24; border-radius: 8px; margin-bottom: 20px; border: 1px solid #f5c6cb;">
+                <i class="fas fa-exclamation-circle"></i> <?php echo $error; ?>
             </div>
         <?php endif; ?>
 
         <form action="student_dashboard_user.php" method="POST" enctype="multipart/form-data" class="auth-card" style="max-width: 100%;">
             
-            <div style="text-align: center; margin-bottom: 20px;">
+            <div style="text-align: center; margin-bottom: 30px;">
                 <?php if ($viewMode): ?>
-                    <img src="image.php?type=student&id=<?php echo $student['id']; ?>" style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px; border: 4px solid var(--bu-light-gray);">
+                    <img src="image.php?type=student&id=<?php echo $student['id']; ?>" style="width: 150px; height: 150px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
                 <?php else: ?>
-                    <div class="form-group" style="text-align: left;">
-                        <label>Student Photo</label>
-                        <input type="file" name="image" class="form-control" accept="image/*" required>
+                    <div class="profile-upload-container" style="position: relative; display: inline-block; cursor: pointer;">
+                        <img src="image/male-placeholder.jpg" style="width: 140px; height: 140px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);" id="previewImg">
+                        <label for="imageUpload" class="profile-upload-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); border-radius: 12px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; color: white;">
+                            <i class="fas fa-camera fa-2x"></i>
+                        </label>
+                        <input type="file" id="imageUpload" name="image" style="display: none;" accept="image/*" required onchange="previewImage(this)">
                     </div>
+                    <p style="margin-top: 10px; color: var(--text-secondary); font-size: 0.9rem;">Upload Student Photo</p>
                 <?php endif; ?>
             </div>
 
-            <div class="form-group">
-                <label>Student ID</label>
-                <input type="text" name="student_id" class="form-control" value="<?php echo htmlspecialchars($student['student_id'] ?? ''); ?>" <?php echo $viewMode ? 'readonly' : 'required'; ?>>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Student ID</label>
+                    <input type="text" name="student_id" class="form-control" value="<?php echo htmlspecialchars($student['student_id'] ?? ''); ?>" <?php echo $viewMode ? 'readonly' : 'required'; ?> placeholder="e.g. 2023-12345">
+                </div>
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" class="form-control" value="<?php echo htmlspecialchars($student['name'] ?? ''); ?>" <?php echo $viewMode ? 'readonly' : 'required'; ?> placeholder="Last Name, First Name M.I.">
+                </div>
             </div>
 
-            <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" name="name" class="form-control" value="<?php echo htmlspecialchars($student['name'] ?? ''); ?>" <?php echo $viewMode ? 'readonly' : 'required'; ?>>
-            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($student['email'] ?? ''); ?>" <?php echo $viewMode ? 'readonly' : 'required'; ?> placeholder="example@bicol-u.edu.ph">
+                </div>
 
-            <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($student['email'] ?? ''); ?>" <?php echo $viewMode ? 'readonly' : 'required'; ?> placeholder="example@bicol-u.edu.ph">
-            </div>
-
-            <div class="form-group">
-                <label>Gender</label>
-                <?php if ($viewMode): ?>
-                    <input type="text" class="form-control" value="<?php echo htmlspecialchars($student['gender'] ?? ''); ?>" readonly>
-                <?php else: ?>
-                <select name="gender" class="form-control" required>
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                </select>
-                <?php endif; ?>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <?php if ($viewMode): ?>
+                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($student['gender'] ?? ''); ?>" readonly>
+                    <?php else: ?>
+                    <select name="gender" class="form-control" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                    <?php endif; ?>
+                </div>
             </div>
 
             <div class="form-group">
@@ -215,49 +227,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="form-group">
-                <label>Department (Auto-assigned)</label>
-                <input type="text" id="departmentDisplay" class="form-control" readonly value="<?php echo htmlspecialchars($student['department'] ?? ''); ?>" style="background-color: #e9ecef;">
+                <label>Department <small style="font-weight: normal; color: #888;">(Auto-assigned)</small></label>
+                <input type="text" id="departmentDisplay" class="form-control" readonly value="<?php echo htmlspecialchars($student['department'] ?? ''); ?>">
             </div>
 
-            <script>
-                const courseMap = {
-                    'Bachelor of Elementary Education': 'Education Department',
-                    'Bachelor of Secondary Education Major in English': 'Education Department',
-                    'Bachelor of Secondary Education Major in Math': 'Education Department',
-                    
-                    'Bachelor of Science in Automotive Technology': 'Technology Department',
-                    'Bachelor of Science in Electrical Technology': 'Technology Department',
-                    'Bachelor of Science in Electronics Technology': 'Technology Department',
-                    'Bachelor of Science in Mechanical Technology': 'Technology Department',
-                    
-                    'Bachelor of Science in Computer Engineering': 'Engineering Department',
-                    'Bachelor of Science in Electronics Engineering': 'Engineering Department',
-                    
-                    'Bachelor of Science in Entrepreneurship': 'Entrepreneurship Department',
-                    
-                    'Bachelor of Science in Information System': 'Computer Studies Department',
-                    'Bachelor of Science in Information Technology': 'Computer Studies Department',
-                    'Bachelor of Science in Information Technology (Animation)': 'Computer Studies Department',
-                    'Bachelor of Science in Computer Science': 'Computer Studies Department',
-                    
-                    'Bachelor of Science in Nursing': 'Nursing Department'
-                };
-
-                function updateDepartment() {
-                    const courseSelect = document.getElementById('courseSelect');
-                    if(courseSelect) {
-                        const course = courseSelect.value;
-                        const deptInput = document.getElementById('departmentDisplay');
-                        deptInput.value = courseMap[course] || '';
-                    }
-                }
-                
-                // Initialize on load if course is selected
-                document.addEventListener('DOMContentLoaded', updateDepartment);
-            </script>
-
-            <div class="form-group" style="display: flex; gap: 20px;">
-                <div style="flex: 1;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
                     <label>Year Level</label>
                     <?php if ($viewMode): ?>
                         <input type="text" class="form-control" value="<?php echo htmlspecialchars($student['year_level']); ?>" readonly>
@@ -270,26 +245,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </select>
                     <?php endif; ?>
                 </div>
-                <div style="flex: 1;">
+                <div class="form-group">
                     <label>Block / Section</label>
                     <?php if ($viewMode): ?>
                         <input type="text" class="form-control" value="<?php echo htmlspecialchars($student['block']); ?>" readonly>
                     <?php else: ?>
                     <select name="block" class="form-control" required>
                         <option value="">Select Block</option>
-                        <option value="1">Block 1</option>
-                        <option value="2">Block 2</option>
-                        <option value="3">Block 3</option>
+                        <option value="A">Block A</option>
+                        <option value="B">Block B</option>
+                        <option value="C">Block C</option>
                     </select>
                     <?php endif; ?>
                 </div>
             </div>
 
             <?php if (!$viewMode): ?>
-                <button type="submit" class="btn btn-primary">Submit Student</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; margin-top: 10px; font-size: 1.1rem;">
+                    <i class="fas fa-save"></i> Submit Student
+                </button>
             <?php endif; ?>
         </form>
     </div>
+
+    <script>
+        const courseMap = {
+            'Bachelor of Elementary Education': 'Education Department',
+            'Bachelor of Secondary Education Major in English': 'Education Department',
+            'Bachelor of Secondary Education Major in Math': 'Education Department',
+            
+            'Bachelor of Science in Automotive Technology': 'Technology Department',
+            'Bachelor of Science in Electrical Technology': 'Technology Department',
+            'Bachelor of Science in Electronics Technology': 'Technology Department',
+            'Bachelor of Science in Mechanical Technology': 'Technology Department',
+            
+            'Bachelor of Science in Computer Engineering': 'Engineering Department',
+            'Bachelor of Science in Electronics Engineering': 'Engineering Department',
+            
+            'Bachelor of Science in Entrepreneurship': 'Entrepreneurship Department',
+            
+            'Bachelor of Science in Information System': 'Computer Studies Department',
+            'Bachelor of Science in Information Technology': 'Computer Studies Department',
+            'Bachelor of Science in Information Technology (Animation)': 'Computer Studies Department',
+            'Bachelor of Science in Computer Science': 'Computer Studies Department',
+            
+            'Bachelor of Science in Nursing': 'Nursing Department'
+        };
+
+        function updateDepartment() {
+            const courseSelect = document.getElementById('courseSelect');
+            if(courseSelect) {
+                const course = courseSelect.value;
+                const deptInput = document.getElementById('departmentDisplay');
+                deptInput.value = courseMap[course] || '';
+            }
+        }
+        
+        // Initialize on load if course is selected
+        document.addEventListener('DOMContentLoaded', updateDepartment);
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImg').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 </body>
 </html>
-
