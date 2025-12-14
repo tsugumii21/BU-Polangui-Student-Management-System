@@ -122,7 +122,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <h2 style="margin-bottom: 5px;"><?php echo $viewMode ? 'Student Details' : 'Add New Student'; ?></h2>
                 <p style="color: var(--text-secondary);"><?php echo $viewMode ? 'View student information' : 'Fill in the details below'; ?></p>
             </div>
-            <a href="students_list_user.php" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to List</a>
+            <?php 
+                // Determine Back Link
+                $backLink = "department_selection.php"; // Default to department directory
+                $btnText = "Back to Departments";
+                
+                if ($viewMode && !empty($student['department'])) {
+                    // If viewing and we know the department, go to that specific list
+                    $backLink = "students_list_user.php?department=" . urlencode($student['department']);
+                    $btnText = "Back to List";
+                } elseif (isset($_GET['department']) && !empty($_GET['department'])) {
+                    // If creating/viewing and department param exists
+                    $backLink = "students_list_user.php?department=" . urlencode($_GET['department']);
+                    $btnText = "Back to List";
+                }
+            ?>
+            <a href="<?php echo $backLink; ?>" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> <?php echo $btnText; ?></a>
         </div>
 
         <?php if ($message): ?>

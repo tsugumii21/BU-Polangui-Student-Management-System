@@ -15,13 +15,23 @@ try {
     $user_count = $stmt->fetchColumn();
 
     // Recent Students - Sorted by Department, Course, Year, Block
-    $stmt = $pdo->query("SELECT * FROM students ORDER BY department ASC, course ASC, year_level ASC, block ASC, created_at DESC LIMIT 5");
+    $stmt = $pdo->query("SELECT * FROM students ORDER BY created_at DESC LIMIT 5");
     $recent_students = $stmt->fetchAll();
 } catch (PDOException $e) {
     $student_count = 0;
     $user_count = 0;
     $recent_students = [];
 }
+
+// Department Colors Mapping
+$dept_colors = [
+    'Computer Studies Department' => '#e91e63', // Pink
+    'Engineering Department' => '#dc3545', // Red
+    'Nursing Department' => '#6f42c1', // Purple
+    'Entrepreneurship Department' => '#28a745', // Green
+    'Technology Department' => '#ffc107', // Yellow
+    'Education Department' => '#007bff' // Blue
+];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -87,7 +97,7 @@ try {
         <div class="recent-activity-section">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                 <h3 style="margin:0; color: var(--bu-blue);">Recently Added Students</h3>
-                <a href="students_list_admin.php" class="btn btn-secondary" style="font-size: 0.85rem;">View All Directory</a>
+                <a href="department_selection.php" class="btn btn-secondary" style="font-size: 0.85rem;">View All Directory</a>
             </div>
             
             <div class="table-responsive">
@@ -104,7 +114,9 @@ try {
                     </thead>
                     <tbody>
                         <?php if (count($recent_students) > 0): ?>
-                            <?php foreach ($recent_students as $student): ?>
+                            <?php foreach ($recent_students as $student): 
+                                $deptColor = $dept_colors[$student['department']] ?? 'var(--text-secondary)';
+                            ?>
                             <tr>
                                 <td style="display: flex; align-items: center; gap: 12px;">
                                     <img src="../backend/image.php?type=student&id=<?php echo $student['id']; ?>" class="student-img-thumb" onerror="this.src='images/male-placeholder.jpg'">
@@ -112,7 +124,7 @@ try {
                                 </td>
                                 <td><span style="background: #e9ecef; padding: 4px 8px; border-radius: 4px; font-family: monospace; font-size: 0.9rem;"><?php echo htmlspecialchars($student['student_id']); ?></span></td>
                                 <td><?php echo htmlspecialchars($student['course']); ?></td>
-                                <td><small style="color: var(--text-secondary);"><?php echo htmlspecialchars($student['department']); ?></small></td>
+                                <td><small style="color: <?php echo $deptColor; ?>; font-weight: 600;"><?php echo htmlspecialchars($student['department']); ?></small></td>
                                 <td><?php echo date('M d, Y', strtotime($student['created_at'])); ?></td>
                                 <td>
                                     <a href="student_dashboard_admin.php?action=edit&id=<?php echo $student['id']; ?>" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;"><i class="fas fa-edit"></i> Edit</a>

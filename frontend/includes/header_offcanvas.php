@@ -60,7 +60,7 @@
                 <a href="index_admin.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'index_admin.php' ? 'active' : ''; ?>">
                     <i class="fas fa-th-large" style="width: 25px;"></i> Dashboard
                 </a>
-                <a href="students_list_admin.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'students_list_admin.php' ? 'active' : ''; ?>">
+                <a href="department_selection.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'department_selection.php' ? 'active' : ''; ?>">
                     <i class="fas fa-users" style="width: 25px;"></i> Students Directory
                 </a>
                 <a href="student_dashboard_admin.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'student_dashboard_admin.php' ? 'active' : ''; ?>">
@@ -70,7 +70,7 @@
                 <a href="index_user.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'index_user.php' ? 'active' : ''; ?>">
                     <i class="fas fa-th-large" style="width: 25px;"></i> Dashboard
                 </a>
-                <a href="students_list_user.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'students_list_user.php' ? 'active' : ''; ?>">
+                <a href="department_selection.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'department_selection.php' ? 'active' : ''; ?>">
                     <i class="fas fa-users" style="width: 25px;"></i> Students Directory
                 </a>
                 <a href="student_dashboard_user.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'student_dashboard_user.php' ? 'active' : ''; ?>">

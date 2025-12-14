@@ -8,6 +8,7 @@ require_once '../database/config.php';
 
 // Filter & Sort Parameters
 $department_filter = $_GET['department'] ?? '';
+$course_filter = $_GET['course'] ?? ''; // Renamed/Added course filter
 $year_filter = $_GET['year'] ?? '';
 $block_filter = $_GET['block'] ?? '';
 $gender_filter = $_GET['gender'] ?? '';
@@ -23,6 +24,10 @@ if (!empty($department_filter)) {
     $sql .= " AND department = ?";
     $params[] = $department_filter;
 }
+if (!empty($course_filter)) {
+    $sql .= " AND course = ?";
+    $params[] = $course_filter;
+}
 if (!empty($year_filter)) {
     $sql .= " AND year_level = ?";
     $params[] = $year_filter;
@@ -37,7 +42,7 @@ if (!empty($gender_filter)) {
 }
 
 // Apply Sorting
-$allowed_sorts = ['name', 'year_level', 'block', 'gender', 'created_at', 'updated_at'];
+$allowed_sorts = ['name', 'year_level', 'block', 'gender', 'created_at', 'updated_at', 'course'];
 if (in_array($sort_by, $allowed_sorts)) {
     $sql .= " ORDER BY $sort_by $order";
 } else {
@@ -49,12 +54,18 @@ try {
     $stmt->execute($params);
     $students = $stmt->fetchAll();
     
-    // Get unique departments for filter dropdown
-    $dept_stmt = $pdo->query("SELECT DISTINCT department FROM students ORDER BY department");
-    $departments = $dept_stmt->fetchAll(PDO::FETCH_COLUMN);
+     // Get unique courses for the current department filter, or all unique courses if no department selected
+    if (!empty($department_filter)) {
+        $course_stmt = $pdo->prepare("SELECT DISTINCT course FROM students WHERE department = ? ORDER BY course");
+        $course_stmt->execute([$department_filter]);
+    } else {
+        $course_stmt = $pdo->query("SELECT DISTINCT course FROM students ORDER BY course");
+    }
+    $courses = $course_stmt->fetchAll(PDO::FETCH_COLUMN);
+
 } catch (PDOException $e) {
     $students = [];
-    $departments = [];
+    $courses = [];
 }
 ?>
 <!DOCTYPE html>
@@ -73,28 +84,48 @@ try {
     <div class="container" style="padding-top: 2.5rem; padding-bottom: 3rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
             <div>
-                <h2>Students Directory</h2>
-                <p style="color: var(--text-secondary);">Browse student records</p>
+                <h2 style="margin-bottom: 5px;">Students Directory</h2>
+                <p style="color: var(--text-secondary);">
+                    <?php if($department_filter): ?>
+                        Viewing students in <strong><?php echo htmlspecialchars($department_filter); ?></strong>
+                    <?php else: ?>
+                        Browse student records
+                    <?php endif; ?>
+                </p>
             </div>
             <div style="display: flex; gap: 10px;">
-                <a href="index_user.php" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
-                <a href="student_dashboard_user.php" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Add New Student</a>
+                <a href="department_selection.php" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Departments</a>
+                <?php
+                    $addLink = "student_dashboard_user.php";
+                    if ($department_filter) {
+                        $addLink .= "?department=" . urlencode($department_filter);
+                    }
+                ?>
+                <a href="<?php echo $addLink; ?>" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Add New Student</a>
             </div>
         </div>
         
         <!-- Advanced Filter & Sort Bar -->
         <div class="filter-bar-container">
+            <?php if($department_filter): ?>
+                <div style="width: 100%; padding-bottom: 15px; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); font-size: 1.1rem; font-weight: 600; color: var(--bu-blue);">
+                    <i class="fas fa-building"></i> <?php echo htmlspecialchars($department_filter); ?>
+                </div>
+            <?php endif; ?>
             <form method="GET" action="students_list_user.php" class="filter-form">
+                <?php if($department_filter): ?>
+                    <input type="hidden" name="department" value="<?php echo htmlspecialchars($department_filter); ?>">
+                <?php endif; ?>
                 
                 <!-- Filters Group -->
                 <div class="filter-group">
                     <div class="filter-item">
-                        <label>Department</label>
-                        <select name="department" class="filter-select" onchange="this.form.submit()">
-                            <option value="">All Departments</option>
-                            <?php foreach ($departments as $dept): ?>
-                                <option value="<?php echo htmlspecialchars($dept); ?>" <?php echo $department_filter === $dept ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($dept); ?>
+                        <label>Course</label>
+                        <select name="course" class="filter-select" onchange="this.form.submit()">
+                            <option value="">All Courses</option>
+                            <?php foreach ($courses as $crs): ?>
+                                <option value="<?php echo htmlspecialchars($crs); ?>" <?php echo $course_filter === $crs ? 'selected' : ''; ?>>
+                                    <?php echo htmlspecialchars($crs); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -158,7 +189,7 @@ try {
                 </div>
 
                 <div class="filter-reset">
-                    <a href="students_list_user.php" class="btn-reset" title="Reset Filters"><i class="fas fa-redo"></i> Reset</a>
+                    <a href="students_list_user.php<?php echo $department_filter ? '?department='.urlencode($department_filter) : ''; ?>" class="btn-reset" title="Reset Filters"><i class="fas fa-redo"></i> Reset</a>
                 </div>
 
             </form>

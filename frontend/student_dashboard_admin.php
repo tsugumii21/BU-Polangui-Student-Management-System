@@ -176,7 +176,22 @@ if (isset($_GET['action']) && $_GET['action'] === 'edit' && isset($_GET['id'])) 
                 <h2 style="margin-bottom: 5px;"><?php echo $editMode ? 'Edit Student' : 'Add New Student'; ?></h2>
                 <p style="color: var(--text-secondary);">Fill in the details below</p>
             </div>
-            <a href="students_list_admin.php" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to List</a>
+            <?php 
+                // Determine Back Link
+                $backLink = "department_selection.php"; // Default to department directory
+                $btnText = "Back to Departments";
+
+                if ($editMode && !empty($student['department'])) {
+                    // If editing and we know the department, go to that specific list
+                    $backLink = "students_list_admin.php?department=" . urlencode($student['department']);
+                    $btnText = "Back to List";
+                } elseif (isset($_GET['department']) && !empty($_GET['department'])) {
+                    // If creating/viewing and department param exists
+                    $backLink = "students_list_admin.php?department=" . urlencode($_GET['department']);
+                    $btnText = "Back to List";
+                }
+            ?>
+            <a href="<?php echo $backLink; ?>" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> <?php echo $btnText; ?></a>
         </div>
 
         <?php if ($message): ?>
