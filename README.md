@@ -139,11 +139,11 @@ student_management_system/
 
 **BSIT-3A**
 
-- **Leader:** Allen Del Valle
+- **Leader:** Allen P. Del Valle
 - **Members:**
-  - Michael Justin Surbano
-  - Asthan Eilexer Patanao
-  - Carlo Delos Santos
+  - Michael Justin B. Surbano
+  - Asthan Eilexer J Patanao
+  - Carlo V. Delos Santos
   - John Roan Ballester
 
 ---
