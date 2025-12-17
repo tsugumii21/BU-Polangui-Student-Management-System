@@ -105,15 +105,32 @@ The **Bicol University Polangui S.M.S** is a robust web application designed to 
 
 ```
 student_management_system/
-├── backend/          # PHP Logic (Auth, CRUD, Image Handling)
-├── database/         # SQL Setup & Config
-├── frontend/         # UI Components
-│   ├── css/          # Stylesheets
-│   ├── js/           # Scripts
-│   ├── images/       # Assets
-│   ├── includes/     # Shared Layouts (Header/Sidebar)
-│   └── *.php         # Application Views
-└── README.md         # Documentation
+├── backend/                  # Server-side Logic
+│   ├── image.php             # Image serving & placeholder logic
+│   ├── login.php             # Authentication processing
+│   ├── logout.php            # Session termination
+│   ├── search_handler.php    # Live search API
+│   └── signup.php            # User registration
+├── database/                 # Database Configuration
+│   ├── config.php            # PDO connection setup
+│   └── student_management_db.sql # Database schema & seed data
+├── frontend/                 # Client-side Interface
+│   ├── css/                  # Stylesheets (style.css)
+│   ├── images/               # Static assets & placeholders
+│   ├── includes/             # Components (header_offcanvas.php)
+│   ├── js/                   # Scripts (script.js)
+│   ├── department_selection.php # Department entry point
+│   ├── index_admin.php       # Admin Dashboard
+│   ├── index_user.php        # User Dashboard
+│   ├── index.html            # Landing Page
+│   ├── login.html            # Login Form
+│   ├── signup.html           # Signup Form
+│   ├── profile.php           # User Profile Settings
+│   ├── student_dashboard_admin.php # Add/Edit Student (Admin)
+│   ├── student_dashboard_user.php  # Add/View Student (User)
+│   ├── students_list_admin.php     # Student Records (Admin)
+│   └── students_list_user.php      # Student Records (User)
+└── README.md                 # Project Documentation
 ```
 
 ---
