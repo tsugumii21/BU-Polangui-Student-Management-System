@@ -32,7 +32,7 @@
         </div>
 
         <!-- Role Badge -->
-        <span class="badge" style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+        <span class="badge" style="background: var(--bu-orange); color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
             <?php echo ucfirst($_SESSION['role']); ?>
         </span>
 

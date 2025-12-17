@@ -120,7 +120,7 @@ $dashboard_link = ($_SESSION['role'] === 'admin') ? 'index_admin.php' : 'index_u
                 <h2 style="margin-bottom: 5px;">University Departments</h2>
                 <p style="color: var(--text-secondary);">Select a department to view students</p>
             </div>
-            <a href="<?php echo $dashboard_link; ?>" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+            <a href="javascript:history.back()" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
         </div>
 
         <div class="dept-grid">

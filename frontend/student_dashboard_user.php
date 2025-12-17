@@ -122,22 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <h2 style="margin-bottom: 5px;"><?php echo $viewMode ? 'Student Details' : 'Add New Student'; ?></h2>
                 <p style="color: var(--text-secondary);"><?php echo $viewMode ? 'View student information' : 'Fill in the details below'; ?></p>
             </div>
-            <?php 
-                // Determine Back Link
-                $backLink = "department_selection.php"; // Default to department directory
-                $btnText = "Back to Departments";
-                
-                if ($viewMode && !empty($student['department'])) {
-                    // If viewing and we know the department, go to that specific list
-                    $backLink = "students_list_user.php?department=" . urlencode($student['department']);
-                    $btnText = "Back to List";
-                } elseif (isset($_GET['department']) && !empty($_GET['department'])) {
-                    // If creating/viewing and department param exists
-                    $backLink = "students_list_user.php?department=" . urlencode($_GET['department']);
-                    $btnText = "Back to List";
-                }
-            ?>
-            <a href="<?php echo $backLink; ?>" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> <?php echo $btnText; ?></a>
+            <a href="javascript:history.back()" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
         </div>
 
         <?php if ($message): ?>
@@ -158,14 +143,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php if ($viewMode): ?>
                     <img src="../backend/image.php?type=student&id=<?php echo $student['id']; ?>" style="width: 150px; height: 150px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
                 <?php else: ?>
-                    <div class="profile-upload-container" style="position: relative; display: inline-block; cursor: pointer;">
+                    <div class="profile-upload-container" style="position: relative; display: inline-block;">
                         <img src="images/male-placeholder.jpg" style="width: 140px; height: 140px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);" id="previewImg" onerror="this.src='images/male-placeholder.jpg'">
-                        <label for="imageUpload" class="profile-upload-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); border-radius: 12px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; color: white;">
-                            <i class="fas fa-camera fa-2x"></i>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <label for="imageUpload" class="btn btn-secondary" style="cursor: pointer;">
+                            <i class="fas fa-camera"></i> Upload Photo
                         </label>
                         <input type="file" id="imageUpload" name="image" style="display: none;" accept="image/*" onchange="previewImage(this)">
                     </div>
-                    <p style="margin-top: 10px; color: var(--text-secondary); font-size: 0.9rem;">Upload Student Photo</p>
                 <?php endif; ?>
             </div>
 

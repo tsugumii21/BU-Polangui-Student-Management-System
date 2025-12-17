@@ -94,7 +94,7 @@ try {
                 </p>
             </div>
             <div style="display: flex; gap: 10px;">
-                <a href="department_selection.php" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Departments</a>
+                <a href="javascript:history.back()" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
                 <?php
                     $addLink = "student_dashboard_user.php";
                     if ($department_filter) {

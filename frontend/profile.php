@@ -103,10 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <h2 style="margin-bottom: 5px;">My Profile</h2>
                 <p style="color: var(--text-secondary);">Update your account settings</p>
             </div>
-            <?php 
-            $backLink = ($user['role'] === 'admin') ? 'index_admin.php' : 'index_user.php';
-            ?>
-            <a href="<?php echo $backLink; ?>" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+            <a href="javascript:history.back()" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
         </div>
 
         <?php if ($message): ?>
