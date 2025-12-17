@@ -4,7 +4,7 @@
 
 <div align="center">
   <img src="frontend/images/bup-logo.png" alt="BU Logo" width="150" height="auto" />
-  <h3>Excellence in Education, Character, and Service</h3>
+  <h3>The Smart Way to Manage Success</h3>
   <p>A comprehensive, production-ready Student Management System built with Native PHP and MySQL, designed to manage student records efficiently.</p>
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?style=for-the-badge)]()
