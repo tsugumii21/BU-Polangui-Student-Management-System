@@ -37,14 +37,6 @@ The **Bicol University Polangui S.M.S** is a robust web application designed to 
 - **Directory Control:**
   - Full control to manage data integrity.
 
-### 📂 Students Directory & Department Selection
-
-- **Department Directory:** A visual and interactive entry point where users select a department (Computer Studies, Engineering, Nursing, etc.) before viewing student lists. Each department is represented by a distinct color and icon for easy navigation.
-- **Course-Based Filtering:** Once inside a department, filter students specifically by **Course** (e.g., BSIT, BSCS) instead of the broad department category.
-- **Advanced Filtering:** Dynamic filters for Year Level, Block, and Gender.
-- **Smart Sorting:** Sort by Name, Date Added, Recently Modified, Year Level, and more.
-- **Global Search:** Instant search functionality for Student Names and IDs.
-
 ### 👤 User Dashboard
 
 - **Overview Statistics:** Real-time view of total students and recent activity.
@@ -53,6 +45,14 @@ The **Bicol University Polangui S.M.S** is a robust web application designed to 
   - **Read-Only Mode:** Users cannot edit or delete existing student records.
 - **Profile Management:** Update personal credentials and profile avatar.
 - **Simplified Interface:** Focused view for non-admin users.
+
+### 📂 Students Directory & Department Selection
+
+- **Department Directory:** A visual and interactive entry point where users select a department (Computer Studies, Engineering, Nursing, etc.) before viewing student lists. Each department is represented by a distinct color and icon for easy navigation.
+- **Course-Based Filtering:** Once inside a department, filter students specifically by **Course** (e.g., BSIT, BSCS) instead of the broad department category.
+- **Advanced Filtering:** Dynamic filters for Year Level, Block, and Gender.
+- **Smart Sorting:** Sort by Name, Date Added, Recently Modified, Year Level, and more.
+- **Global Search:** Instant search functionality for Student Names and IDs.
 
 ### 🔐 Security & Tech
 
