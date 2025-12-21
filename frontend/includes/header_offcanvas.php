@@ -8,6 +8,9 @@
 
 // We can assume this file is included by files in 'frontend/'.
 ?>
+<!-- Ensure SweetAlert2 is loaded -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <nav class="main-header">
     <div class="brand-logo" style="display: flex; align-items: center; gap: 15px;">
         <!-- Sidebar Toggle (Moved here) -->
@@ -41,7 +44,7 @@
             <img src="../backend/image.php?type=user&id=<?php echo $_SESSION['user_id']; ?>" class="profile-img-small" onerror="this.src='images/male-placeholder.jpg'">
         </a>
         
-        <a href="../backend/logout.php" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.9rem;">
+        <a href="../backend/logout.php" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.9rem;" onclick="confirmLogout(event)">
             <i class="fas fa-sign-out-alt"></i> Logout
         </a>
     </div>
@@ -52,7 +55,9 @@
 <div class="offcanvas" id="sidebar">
     <div class="offcanvas-header">
         <h3>Menu</h3>
-        <button id="closeSidebar" class="btn" style="background: transparent; color: white;"><i class="fas fa-times"></i></button>
+        <button id="closeSidebar" class="btn" style="background: transparent; color: white; padding: 5px; font-size: 1.2rem; border: none; cursor: pointer;">
+            <i class="fas fa-bars"></i>
+        </button>
     </div>
     <div class="offcanvas-body">
         <div class="offcanvas-nav">
@@ -85,3 +90,38 @@
 </div>
 
 <script src="js/script.js"></script>
+<script>
+    function confirmLogout(event) {
+        event.preventDefault(); // Prevent the default link action
+        const logoutUrl = event.currentTarget.getAttribute('href');
+
+        Swal.fire({
+            title: 'Logout?',
+            text: "Are you sure you want to end your session?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'var(--bu-blue)',
+            cancelButtonColor: '#d33', // Standard red for cancel/danger actions
+            confirmButtonText: 'Yes, logout',
+            cancelButtonText: 'Cancel',
+            width: '400px',
+            padding: '2em',
+            background: '#fff',
+            backdrop: `
+                rgba(0,0,0,0.4)
+                left top
+                no-repeat
+            `,
+            customClass: {
+                popup: 'swal-custom-popup',
+                title: 'swal-custom-title',
+                htmlContainer: 'swal-custom-text',
+                actions: 'swal-custom-actions'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = logoutUrl;
+            }
+        });
+    }
+</script>

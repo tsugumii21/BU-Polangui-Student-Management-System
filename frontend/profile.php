@@ -93,6 +93,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .swal-custom-popup {
+            border-radius: 16px !important;
+            font-family: 'Inter', sans-serif !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+        }
+        .swal-custom-title {
+            color: var(--bu-blue) !important;
+            font-weight: 700 !important;
+            font-size: 1.4rem !important;
+            margin-bottom: 0.5rem !important;
+        }
+        .swal-custom-text {
+            color: var(--text-secondary) !important;
+            font-size: 0.95rem !important;
+        }
+        .swal2-confirm {
+            padding: 12px 24px !important;
+            font-weight: 600 !important;
+            border-radius: 8px !important;
+            box-shadow: 0 4px 10px rgba(0, 51, 102, 0.2) !important;
+        }
+        .swal2-cancel {
+            padding: 12px 24px !important;
+            font-weight: 600 !important;
+            border-radius: 8px !important;
+        }
+        .profile-upload-container:hover .profile-upload-overlay {
+            opacity: 1 !important;
+        }
+    </style>
 </head>
 <body>
     <?php include 'includes/header_offcanvas.php'; ?>
@@ -156,11 +188,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 1.1rem;">Save Changes</button>
+            <button type="button" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 1.1rem;" onclick="confirmUpdate(this.form)">Save Changes</button>
         </form>
     </div>
 
     <script>
+        function confirmUpdate(form) {
+            // Check form validity first
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            Swal.fire({
+                title: 'Update Profile?',
+                text: "Are you sure you want to save these changes to your profile?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: 'var(--bu-blue)',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save changes',
+                cancelButtonText: 'Cancel',
+                width: '400px',
+                padding: '2em',
+                background: '#fff',
+                backdrop: `
+                    rgba(0,0,0,0.4)
+                    left top
+                    no-repeat
+                `,
+                customClass: {
+                    popup: 'swal-custom-popup',
+                    title: 'swal-custom-title',
+                    htmlContainer: 'swal-custom-text',
+                    actions: 'swal-custom-actions'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
+
         function previewImage(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();

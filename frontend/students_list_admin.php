@@ -77,6 +77,7 @@ try {
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <?php include 'includes/header_offcanvas.php'; ?>
@@ -235,10 +236,10 @@ try {
                             <td>
                                 <div style="display: flex; gap: 8px;">
                                     <a href="student_dashboard_admin.php?action=edit&id=<?php echo $student['id']; ?>" class="btn btn-secondary" style="padding: 8px 12px; font-size: 0.85rem;" title="Edit"><i class="fas fa-edit"></i></a>
-                                    <form action="student_dashboard_admin.php" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this student?');">
+                                    <form action="student_dashboard_admin.php" method="POST" style="display:inline;" class="delete-form">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="id" value="<?php echo $student['id']; ?>">
-                                        <button type="submit" class="btn btn-danger" style="padding: 8px 12px; font-size: 0.85rem;" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                                        <button type="button" class="btn btn-danger" style="padding: 8px 12px; font-size: 0.85rem;" title="Delete" onclick="confirmDelete(this.form)"><i class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </div>
                             </td>
@@ -256,5 +257,66 @@ try {
             </table>
         </div>
     </div>
+    
+    <script>
+    function confirmDelete(form) {
+        Swal.fire({
+            title: 'Delete Student Record?',
+            text: "You are about to permanently delete this student. This action cannot be undone.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            width: '400px',
+            padding: '2em',
+            background: '#fff',
+            backdrop: `
+                rgba(0,0,0,0.4)
+                left top
+                no-repeat
+            `,
+            customClass: {
+                popup: 'swal-custom-popup',
+                title: 'swal-custom-title',
+                htmlContainer: 'swal-custom-text',
+                actions: 'swal-custom-actions'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    }
+    </script>
+    <style>
+        .swal-custom-popup {
+            border-radius: 16px !important;
+            font-family: 'Inter', sans-serif !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+        }
+        .swal-custom-title {
+            color: var(--bu-blue) !important;
+            font-weight: 700 !important;
+            font-size: 1.4rem !important;
+            margin-bottom: 0.5rem !important;
+        }
+        .swal-custom-text {
+            color: var(--text-secondary) !important;
+            font-size: 0.95rem !important;
+        }
+        .swal2-confirm {
+            padding: 12px 24px !important;
+            font-weight: 600 !important;
+            border-radius: 8px !important;
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.2) !important;
+        }
+        .swal2-cancel {
+            padding: 12px 24px !important;
+            font-weight: 600 !important;
+            border-radius: 8px !important;
+        }
+    </style>
 </body>
 </html>

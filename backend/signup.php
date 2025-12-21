@@ -4,11 +4,12 @@ require_once '../database/config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
 
     // Basic Validation
-    if (empty($username) || empty($password)) {
+    if (empty($username) || empty($password) || empty($email)) {
         header("Location: ../frontend/signup.html?error=empty");
         exit();
     }
@@ -20,8 +21,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Check if user exists
     try {
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
-        $stmt->execute([$username]);
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
+        $stmt->execute([$username, $email]);
         if ($stmt->fetch()) {
             header("Location: ../frontend/signup.html?error=exists");
             exit();
@@ -30,12 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Create new user
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         // Default role is 'user'. 
-        // Note: For 'admin' creation, you'd typically do it manually in DB or have a secret code.
-        // The prompt says "admin (user: admin, pass: 1234)". We can pre-seed this or let the user create it.
-        // I will just implement standard signup as 'user'.
 
-        $stmt = $pdo->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, 'user')");
-        if ($stmt->execute([$username, $hashed_password])) {
+        $stmt = $pdo->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, 'user')");
+        if ($stmt->execute([$username, $email, $hashed_password])) {
             header("Location: ../frontend/login.html?error=created");
             exit();
         } else {
@@ -53,4 +51,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit();
 }
 ?>
-

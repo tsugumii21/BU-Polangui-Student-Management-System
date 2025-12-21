@@ -616,3 +616,31 @@ h1, h2, h3, h4, h5, h6 {
     background-color: var(--bu-orange);
     color: white;
 }
+
+/* SweetAlert Custom Themes (Global) */
+.swal-custom-popup {
+    border-radius: 16px !important;
+    font-family: 'Inter', sans-serif !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+}
+.swal-custom-title {
+    color: var(--bu-blue) !important;
+    font-weight: 700 !important;
+    font-size: 1.4rem !important;
+    margin-bottom: 0.5rem !important;
+}
+.swal-custom-text {
+    color: var(--text-secondary) !important;
+    font-size: 0.95rem !important;
+}
+.swal2-confirm {
+    padding: 12px 24px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 10px rgba(0, 51, 102, 0.2) !important;
+}
+.swal2-cancel {
+    padding: 12px 24px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+}
